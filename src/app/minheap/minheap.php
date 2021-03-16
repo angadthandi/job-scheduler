@@ -10,7 +10,11 @@ class MinHeap extends SplMinHeap
             if ($zeroIdxDiff == 0) {
                 // error_log('ethe');
                 // error_log($item1[1] . ' - ' . $item2[1]);
-                return (int) $item2[1] - $item1[1];
+                $oneIdxDiff = (int) $item2[1] - $item1[1];
+
+                if ($oneIdxDiff == 0) {
+                    return (int) $item2[2] - $item1[2];
+                }
             }
             return $zeroIdxDiff;
         }
