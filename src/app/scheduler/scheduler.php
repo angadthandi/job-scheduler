@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . "/../minheap/minheap.php";
-require_once __DIR__ . "/../maxheap/maxheap.php";
 require_once __DIR__ . "/../job/job.php";
 
 class Scheduler {
@@ -12,10 +11,10 @@ class Scheduler {
     public const EDF = 3;
 
     private array $jobs; // Job[]
-    private array $fcfsMinHeap; // MinHeap[] -- first come first serve
-    private array $sjfMinHeap; // MinHeap[] -- shortest job first
-    private array $fpsMinHeap; // MinHeap[] -- fixed priority scheduling
-    private array $edfMinHeap; // MinHeap[] -- earliest deadline first
+    private object $fcfsMinHeap; // MinHeap[] -- first come first serve
+    private object $sjfMinHeap; // MinHeap[] -- shortest job first
+    private object $fpsMinHeap; // MinHeap[] -- fixed priority scheduling
+    private object $edfMinHeap; // MinHeap[] -- earliest deadline first
 
     public function __construct() {
         $this->jobs = [];
@@ -45,9 +44,51 @@ class Scheduler {
 
     public function GetSchedulingSequence(
         Int $scheduleAlgo,
-        Int $num
+        Int $numOfThreads
     ): array {
-        return [];
+        // $ret = [] * $numOfThreads; // Thread[]Job[]
+        $ret = array_fill(0, $numOfThreads, []); // Thread[]Job[]
+        $threadCapacity = array_fill(0, $numOfThreads, 0);
+        $totalTimeTaken = array_fill(0, $numOfThreads, 0);
+
+        switch ($scheduleAlgo) {
+            case self::FCFS:
+                // while(count($this->fcfsMinHeap) > 0) {
+                //     for ($i=0; $i<$numOfThreads; $i++) {
+                //         if ($threadCapacity[$i] == 0) {
+
+                            if (!empty($this->fcfsMinHeap)) {
+                                $count = $this->fcfsMinHeap->count();
+                                error_log('count: ' . print_r($count,true));
+                                $top = $this->fcfsMinHeap->top();
+                                error_log('top: ' . print_r($top,true));
+                                $pop = $this->fcfsMinHeap->extract();
+                                error_log('pop: ' . print_r($pop,true));
+                                $top1 = $this->fcfsMinHeap->top();
+                                error_log('top1: ' . print_r($top1,true));
+                                $count1 = $this->fcfsMinHeap->count();
+                                error_log('count1: ' . print_r($count1,true));
+                            }
+                //         }
+                //     }
+                // }        
+                break;
+            case self::SJF:
+                break;
+            case self::FPS:
+                break;
+            case self::EDF:
+                break;
+            default:
+                error_log("Invalid case : " . (string)$scheduleAlgo);
+                break;
+        }
+
+        return $ret;
+    }
+
+    public function processThread(Array &$threadCapacity): void {
+
     }
 
 }
