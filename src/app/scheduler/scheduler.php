@@ -53,25 +53,39 @@ class Scheduler {
 
         switch ($scheduleAlgo) {
             case self::FCFS:
-                // while(count($this->fcfsMinHeap) > 0) {
-                //     for ($i=0; $i<$numOfThreads; $i++) {
-                //         if ($threadCapacity[$i] == 0) {
+                while($this->fcfsMinHeap->count() > 0) {
+                    for ($i=0; $i<$numOfThreads; $i++) {
+                        // error_log(
+                        //     'i:' .$i .
+                        //     '; threadCapacity[$i]:' . $threadCapacity[$i]
+                        // );
+                        if ($threadCapacity[$i] == 0) {
 
-                            if (!empty($this->fcfsMinHeap)) {
-                                $count = $this->fcfsMinHeap->count();
-                                error_log('count: ' . print_r($count,true));
-                                $top = $this->fcfsMinHeap->top();
-                                error_log('top: ' . print_r($top,true));
-                                $pop = $this->fcfsMinHeap->extract();
-                                error_log('pop: ' . print_r($pop,true));
-                                $top1 = $this->fcfsMinHeap->top();
-                                error_log('top1: ' . print_r($top1,true));
-                                $count1 = $this->fcfsMinHeap->count();
-                                error_log('count1: ' . print_r($count1,true));
+                            if ($this->fcfsMinHeap->count() > 0) {
+                                // $count = $this->fcfsMinHeap->count();
+                                // error_log('count: ' . print_r($count,true));
+                                // $top = $this->fcfsMinHeap->top();
+                                // error_log('top: ' . print_r($top,true));
+                                // $pop = $this->fcfsMinHeap->extract();
+                                // error_log('pop: ' . print_r($pop,true));
+                                // $top1 = $this->fcfsMinHeap->top();
+                                // error_log('top1: ' . print_r($top1,true));
+                                // $count1 = $this->fcfsMinHeap->count();
+                                // error_log('count1: ' . print_r($count1,true));
+
+                                $headData = $this->fcfsMinHeap->top();
+                                $job = $headData[3];
+                                $ret[$i][] = $job;
+                                $threadCapacity[$i] += $job->GetDuration();
+                                // pop
+                                $this->fcfsMinHeap->extract();
                             }
-                //         }
-                //     }
-                // }        
+                        }
+                    }
+                    // error_log(print_r($threadCapacity,true));
+                    $this->processThreads($threadCapacity);
+                    // error_log(print_r($threadCapacity,true));
+                }
                 break;
             case self::SJF:
                 break;
@@ -87,8 +101,11 @@ class Scheduler {
         return $ret;
     }
 
-    public function processThread(Array &$threadCapacity): void {
-
+    public function processThreads(Array &$threadCapacity): void {
+        $minElement = min($threadCapacity);
+        for($i = 0; $i < count($threadCapacity); $i++) {
+            $threadCapacity[$i] -= $minElement;
+        }
     }
 
 }
