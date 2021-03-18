@@ -88,10 +88,63 @@ class Scheduler {
                 }
                 break;
             case self::SJF:
+                while($this->sjfMinHeap->count() > 0) {
+                    for ($i=0; $i<$numOfThreads; $i++) {
+                        if ($threadCapacity[$i] == 0) {
+
+                            if ($this->sjfMinHeap->count() > 0) {
+                                $headData = $this->sjfMinHeap->top();
+                                $job = $headData[3];
+                                $ret[$i][] = $job;
+                                $threadCapacity[$i] += $job->GetDuration();
+                                // pop
+                                $this->sjfMinHeap->extract();
+                            }
+                        }
+                    }
+                    $this->processThreads($threadCapacity);
+                }
                 break;
             case self::FPS:
+                while($this->fpsMinHeap->count() > 0) {
+                    for ($i=0; $i<$numOfThreads; $i++) {
+                        if ($threadCapacity[$i] == 0) {
+
+                            if ($this->fpsMinHeap->count() > 0) {
+                                $headData = $this->fpsMinHeap->top();
+                                $job = $headData[3];
+                                $ret[$i][] = $job;
+                                $threadCapacity[$i] += $job->GetDuration();
+                                // pop
+                                $this->fpsMinHeap->extract();
+                            }
+                        }
+                    }
+                    $this->processThreads($threadCapacity);
+                }
                 break;
             case self::EDF:
+                while($this->edfMinHeap->count() > 0) {
+                    for ($i=0; $i<$numOfThreads; $i++) {
+                        if ($threadCapacity[$i] == 0) {
+
+                            if ($this->edfMinHeap->count() > 0) {
+                                $headData = $this->edfMinHeap->top();
+                                $job = $headData[3];
+                                $totalTimeTaken[$i] += $job->GetDuration();
+                                if($totalTimeTaken[$i] <= $job->GetDeadline()) {
+                                    $ret[$i][] = $job;
+                                } else {
+                                    $totalTimeTaken[$i] -= $job->GetDuration();
+                                }
+                                $threadCapacity[$i] += $job->GetDuration();
+                                // pop
+                                $this->edfMinHeap->extract();
+                            }
+                        }
+                    }
+                    $this->processThreads($threadCapacity);
+                }
                 break;
             default:
                 error_log("Invalid case : " . (string)$scheduleAlgo);

@@ -40,6 +40,7 @@ $scheduler1->AddJob($job3);
 $scheduler1->AddJob($job4);
 $scheduler1->AddJob($job5);
 
+error_log("----------------FCFS--------------");
 $fcfs = $scheduler1->GetSchedulingSequence(Scheduler::FCFS, 2);
 // error_log(print_r($fcfs,true));
 $fcfsStr = '';
@@ -52,3 +53,45 @@ for($i = 0; $i < count($fcfs); $i++) {
     $fcfsStr .= "\n";
 }
 error_log($fcfsStr);
+
+error_log("----------------SJF--------------");
+$sjf = $scheduler1->GetSchedulingSequence(Scheduler::SJF, 2);
+// error_log(print_r($sjf,true));
+$sjfStr = '';
+for($i = 0; $i < count($sjf); $i++) {
+    $jobs = $sjf[$i];
+
+    foreach($jobs as $job) {
+        $sjfStr .= $job->GetName() . ' ';
+    }
+    $sjfStr .= "\n";
+}
+error_log($sjfStr);
+
+error_log("----------------FPS--------------");
+$fps = $scheduler1->GetSchedulingSequence(Scheduler::FPS, 2);
+// error_log(print_r($fps,true));
+$fpsStr = '';
+for($i = 0; $i < count($fps); $i++) {
+    $jobs = $fps[$i];
+
+    foreach($jobs as $job) {
+        $fpsStr .= $job->GetName() . ' ';
+    }
+    $fpsStr .= "\n";
+}
+error_log($fpsStr);
+
+error_log("----------------EDF--------------");
+$edf = $scheduler1->GetSchedulingSequence(Scheduler::EDF, 2);
+// error_log(print_r($edf,true));
+$edfStr = '';
+for($i = 0; $i < count($edf); $i++) {
+    $jobs = $edf[$i];
+
+    foreach($jobs as $job) {
+        $edfStr .= $job->GetName() . ' ';
+    }
+    $edfStr .= "\n";
+}
+error_log($edfStr);
