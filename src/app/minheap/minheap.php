@@ -15,6 +15,7 @@ class MinHeap extends SplMinHeap
                 if ($oneIdxDiff == 0) {
                     return (int) $item2[2] - $item1[2];
                 }
+                return $oneIdxDiff;
             }
             return $zeroIdxDiff;
         }
